@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jadwal Kuliah</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body{
+      background: linear-gradient(135deg,#0f172a,#1e3a8a);
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:20px;
+    }
+
+    .container{
+      width:100%;
+      max-width:1200px;
+      background:rgb(246, 243, 243);
+      padding:30px;
+      border-radius:20px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.3);
+      overflow-x:auto;
+    }
+
+    h1{
+      text-align:center;
+      margin-bottom:25px;
+      color:#1e3a8a;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:900px;
+    }
+
+    th{
+      background:#1e3a8a;
+      color:white;
+      padding:14px;
+      font-size:16px;
+    }
+
+    td{
+      padding:12px;
+      border-bottom:1px solid #ddd;
+      text-align:center;
+      transition:0.3s;
+    }
+
+    tr:hover td{
+      background:#e5067d;
+    }
+
+    .selasa{
+      background:#fef3c7;
+    }
+
+    .rabu{
+      background:#dcfce7;
+    }
+
+    .kamis{
+      background:#dbeafe;
+    }
+
+    .total{
+      background:#1e293b;
+      color:white;
+      font-weight:bold;
+    }
+
+    .footer{
+      text-align:center;
+      margin-top:20px;
+      color:gray;
+      font-size:14px;
+    }
+
+    @media(max-width:768px){
+      th, td{
+        font-size:12px;
+        padding:10px;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>📚 Jadwal Kuliah Kelas E1 Sistem Informasi Semester 2</h1>
+
+  <table>
+    <tr>
+      <th>Hari</th>
+      <th>Pukul</th>
+      <th>Mata Kuliah</th>
+      <th>Ruang</th>
+      <th>SKS</th>
+      <th>Dosen</th>
+    </tr>
+
+    <tr class="selasa">
+      <td>Selasa</td>
+      <td>07.30 - 09.10</td>
+      <td>Ibadah & Muamalah</td>
+      <td>F306</td>
+      <td>2</td>
+      <td>Isman Efendi Limbong, S.PdI., M.PdI</td>
+    </tr>
+
+    <tr class="selasa">
+      <td>Selasa</td>
+      <td>09.10 - 10.40</td>
+      <td>Organisasi & Manajemen</td>
+      <td>604</td>
+      <td>2</td>
+      <td>Arni Susanti, S.Si., M.Sc</td>
+    </tr>
+
+    <tr class="selasa">
+      <td>Selasa</td>
+      <td>14.20 - 16.00</td>
+      <td>Teknologi Open Source</td>
+      <td>F306</td>
+      <td>2</td>
+      <td>Eka Rahayu, S.Kom., M.Kom</td>
+    </tr>
+
+    <tr class="rabu">
+      <td>Rabu</td>
+      <td>07.30 - 09.10</td>
+      <td>Struktur Data</td>
+      <td>602</td>
+      <td>2</td>
+      <td>Boni Oktaviana Sembiring, S.Kom., M.Kom</td>
+    </tr>
+
+    <tr class="rabu">
+      <td>Rabu</td>
+      <td>09.10 - 10.40</td>
+      <td>Prak. Teknologi Open Source</td>
+      <td>Lab 606</td>
+      <td>1</td>
+      <td>Eka Rahayu, S.Kom., M.Kom</td>
+    </tr>
+
+    <tr class="rabu">
+      <td>Rabu</td>
+      <td>10.50 - 12.20</td>
+      <td>Prak. Struktur Data</td>
+      <td>Lab 606</td>
+      <td>1</td>
+      <td>Boni Oktaviana Sembiring, S.Kom., M.Kom</td>
+    </tr>
+
+    <tr class="rabu">
+      <td>Rabu</td>
+      <td>12.30 - 14.00</td>
+      <td>Prak. Sistem Operasi</td>
+      <td>Lab 607</td>
+      <td>1</td>
+      <td>Andi Zulherry, S.Kom., M.Kom</td>
+    </tr>
+
+    <tr class="rabu">
+      <td>Rabu</td>
+      <td>14.20 - 16.00</td>
+      <td>Kewarganegaraan</td>
+      <td>701</td>
+      <td>2</td>
+      <td>Qorry Ulfah Lasia, S.HI., M.Kn</td>
+    </tr>
+
+    <tr class="kamis">
+      <td>Kamis</td>
+      <td>07.30 - 09.10</td>
+      <td>Sistem Operasi</td>
+      <td>F303</td>
+      <td>2</td>
+      <td>Andi Zulherry, S.Kom., M.Kom</td>
+    </tr>
+
+    <tr class="kamis">
+      <td>Kamis</td>
+      <td>10.00 - 12.30</td>
+      <td>Matematika Diskrit</td>
+      <td>708</td>
+      <td>3</td>
+      <td>Zuli Agustina Gultom, M.Si</td>
+    </tr>
+
+    <tr class="total">
+      <td colspan="4">Jumlah SKS</td>
+      <td colspan="2">18</td>
+    </tr>
+
+  </table>
+
+  <div class="footer">
+    © 2026 | Website Jadwal Kuliah Mahasiswa
+  </div>
+
+</div>
+
+</body>
+</html>
