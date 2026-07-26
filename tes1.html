@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kepuasan Pelanggan - Tabungan Mandiriku</title>
+  <style>
+    /* Reset & Dasar Font */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Comic Sans MS', 'Chalkboard SE', 'Fredoka', 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background-color: #f2f7f4;
+      background-image: radial-gradient(#d1e4d9 1.5px, transparent 1.5px);
+      background-size: 24px 24px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: #333;
+      overflow-x: hidden;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+      transition: opacity 0.5s;
+    }
+
+    header h1 {
+      font-size: 2.2rem;
+      color: #1e5e3a;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      font-size: 1.2rem;
+      color: #555;
+    }
+
+    /* Container Utama untuk Animasi */
+    .main-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 1000px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 400px;
+    }
+
+    /* Container Kartu Pilihan (Awal) */
+    .feedback-container {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      align-items: stretch;
+      flex-wrap: wrap;
+      width: 100%;
+      transition: all 0.5s ease-in-out;
+    }
+
+    /* Kartu Emotikon Basar */
+    .feedback-card {
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 30px 20px;
+      flex: 1;
+      min-width: 260px;
+      max-width: 300px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      border: 3px solid transparent;
+      cursor: pointer;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                  box-shadow 0.3s, border-color 0.3s, opacity 0.5s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      opacity: 1;
+    }
+
+    /* Hover effect saat masih dalam mode pilihan */
+    .feedback-container .feedback-card:hover, 
+    .feedback-container .feedback-card:focus {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+      outline: none;
+    }
+
+    /* Gaya CSS Emotikon */
+    .emoji-circle {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin-bottom: 24px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset -4px -4px 10px rgba(0,0,0,0.15);
+      transition: transform 0.5s ease;
+    }
+
+    .emoji-svg {
+      width: 100px;
+      height: 100px;
+    }
+
+    /* Warna Spesifik Kartu */
+    .card-red { .title-red { color: #d32f2f; } .emoji-red { background: radial-gradient(circle at 35% 35%, #ff6b6b, #d32f2f); } }
+    .card-red:hover, .card-red:focus { border-color: #e53935; }
+
+    .card-orange { .title-orange { color: #e65100; } .emoji-orange { background: radial-gradient(circle at 35% 35%, #ffcc80, #f57c00); } }
+    .card-orange:hover, .card-orange:focus { border-color: #fb8c00; }
+
+    .card-green { .title-green { color: #1b5e20; } .emoji-green { background: radial-gradient(circle at 35% 35%, #81c784, #2e7d32); } }
+    .card-green:hover, .card-green:focus { border-color: #2e7d32; }
+
+    /* Teks dalam Kartu */
+    .card-title { font-size: 1.6rem; font-weight: bold; margin-bottom: 12px; }
+    .card-desc { font-size: 1rem; color: #666; line-height: 1.4; transition: opacity 0.3s; }
+
+    /* --- STATE SAAT DIPILIH (STATE SELESAI) --- */
+
+    /* Container utama jadi rata tengah vertikal */
+    .main-wrapper.completed {
+      flex-direction: column;
+    }
+
+    /* Kartu yang tidak dipilih menghilang */
+    .feedback-card.fade-out {
+      opacity: 0;
+      transform: scale(0.5);
+      pointer-events: none;
+      position: absolute; /* Agar tidak memakan ruang */
+    }
+
+    /* Kartu yang DIPILIH berpindah ke tengah dan membesar */
+    .feedback-card.selected {
+      position: relative;
+      transform: scale(1.15);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+      border-color: #ddd;
+      cursor: default;
+      flex: none; /* Matikan flex grow agar ukuran stabil */
+      margin-bottom: 30px; /* Jarak ke teks terima kasih */
+    }
+
+    /* Matikan hover pada kartu yang sudah dipilih */
+    .feedback-card.selected:hover {
+      transform: scale(1.15);
+    }
+
+    /* Sembunyikan deskripsi kecil saat mode konfirmasi */
+    .feedback-card.selected .card-desc {
+      opacity: 0;
+      height: 0;
+      margin: 0;
+    }
+
+    /* Layar Konfirmasi Terima Kasih */
+    .thank-you-container {
+      display: none; /* Sembunyi di awal */
+      text-align: center;
+      max-width: 500px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s 0.3s ease-out, transform 0.5s 0.3s ease-out; /* Delay sedikit */
+    }
+
+    .thank-you-container.show {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .thank-you-container h2 {
+      color: #2e7d32;
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    .thank-you-container p {
+      font-size: 1.2rem;
+      color: #555;
+      margin-bottom: 25px;
+    }
+
+    .btn-reset {
+      background-color: #2e7d32;
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      font-size: 1.1rem;
+      border-radius: 15px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .btn-reset:hover {
+      background-color: #1b5e20;
+      transform: scale(1.05);
+    }
+
+  </style>
+</head>
+<body>
+
+  <header id="main-header">
+    <h1>Tabungan Mandiriku</h1>
+    <p>Bagaimana perasaanmu setelah menabung hari ini?</p>
+  </header>
+
+  <div class="main-wrapper" id="main-wrapper">
+    
+    <!-- Pilihan Emotikon -->
+    <main class="feedback-container" id="feedback-options">
+      
+      <!-- Pilihan 1: Marah / Sulit -->
+      <div class="feedback-card card-red" tabindex="0" onclick="selectFeedback(this, 'Marah / Sulit')" role="button" id="card-1">
+        <div class="emoji-circle emoji-red">
+          <svg class="emoji-svg" viewBox="0 0 100 100">
+            <path d="M 25 38 L 42 46" stroke="#222" stroke-width="6" stroke-linecap="round"/>
+            <path d="M 75 38 L 58 46" stroke="#222" stroke-width="6" stroke-linecap="round"/>
+            <circle cx="33" cy="52" r="6" fill="#222"/>
+            <circle cx="67" cy="52" r="6" fill="#222"/>
+            <circle cx="25" cy="60" r="8" fill="#ff8a80" opacity="0.6"/>
+            <circle cx="75" cy="60" r="8" fill="#ff8a80" opacity="0.6"/>
+            <path d="M 33 75 Q 50 60 67 75" fill="transparent" stroke="#222" stroke-width="6" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="card-title title-red">Marah / Sulit</div>
+        <div class="card-desc">Materi membingungkan / capek</div>
+      </div>
+
+      <!-- Pilihan 2: Biasa -->
+      <div class="feedback-card card-orange" tabindex="0" onclick="selectFeedback(this, 'Biasa')" role="button" id="card-2">
+        <div class="emoji-circle emoji-orange">
+          <svg class="emoji-svg" viewBox="0 0 100 100">
+            <circle cx="33" cy="45" r="6" fill="#222"/>
+            <circle cx="67" cy="45" r="6" fill="#222"/>
+            <circle cx="23" cy="52" r="8" fill="#ffe0b2" opacity="0.8"/>
+            <circle cx="77" cy="52" r="8" fill="#ffe0b2" opacity="0.8"/>
+            <path d="M 35 65 L 65 65" stroke="#222" stroke-width="6" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="card-title title-orange">Biasa</div>
+        <div class="card-desc">Lancar, tapi butuh semangat</div>
+      </div>
+
+      <!-- Pilihan 3: Senang -->
+      <div class="feedback-card card-green" tabindex="0" onclick="selectFeedback(this, 'Senang')" role="button" id="card-3">
+        <div class="emoji-circle emoji-green">
+          <svg class="emoji-svg" viewBox="0 0 100 100">
+            <path d="M 26 45 Q 33 35 40 45" fill="transparent" stroke="#222" stroke-width="6" stroke-linecap="round"/>
+            <path d="M 60 45 Q 67 35 74 45" fill="transparent" stroke="#222" stroke-width="6" stroke-linecap="round"/>
+            <circle cx="22" cy="52" r="8" fill="#a5d6a7" opacity="0.8"/>
+            <circle cx="78" cy="52" r="8" fill="#a5d6a7" opacity="0.8"/>
+            <path d="M 30 58 Q 50 82 70 58 Z" fill="#222"/>
+            <path d="M 40 68 Q 50 78 60 68" fill="#ff8a80"/>
+          </svg>
+        </div>
+        <div class="card-title title-green">Senang</div>
+        <div class="card-desc">Seru banget & paham materi!</div>
+      </div>
+
+    </main>
+
+    <!-- Layar Konfirmasi Terima Kasih -->
+    <section class="thank-you-container" id="thankyou-screen">
+      <h2>Hebat! Terima Kasih Ya 🎉</h2>
+      <p id="thankyou-text">Jawaban kamu sudah disimpan.</p>
+      <button class="btn-reset" onclick="resetForm()">Pilih Lagi</button>
+    </section>
+
+  </div>
+
+  <script>
+    function selectFeedback(selectedCard, statusName) {
+      const allCards = document.querySelectorAll('.feedback-card');
+      const wrapper = document.getElementById('main-wrapper');
+      const header = document.getElementById('main-header');
+      const thankYouScreen = document.getElementById('thankyou-screen');
+      const thankYouText = document.getElementById('thankyou-text');
+
+      // 1. Sembunyikan Header
+      header.style.opacity = '0';
+      header.style.pointerEvents = 'none';
+
+      // 2. Ubah state container utama
+      wrapper.classList.add('completed');
+
+      // 3. Animasikan Kartu
+      allCards.forEach(card => {
+        if (card === selectedCard) {
+          // Kartu yang dipilih: tambahkan kelas 'selected'
+          card.classList.add('selected');
+          // Matikan onclick agar tidak bisa diklik lagi saat mode konfirmasi
+          card.onclick = null; 
+        } else {
+          // Kartu yang TIDAK dipilih: tambahkan kelas 'fade-out'
+          card.classList.add('fade-out');
+        }
+      });
+
+      // 4. Tampilkan teks terima kasih dengan animasi delay
+      setTimeout(() => {
+        thankYouText.textContent = `Kamu merasa "${statusName}" hari ini. Tetap semangat menabung di Mandiriku!`;
+        thankYouScreen.classList.add('show');
+      }, 300); // Tampil setelah kartu mulai bergerak
+
+      console.log("Feedback dipilih:", statusName);
+    }
+
+    function resetForm() {
+      // Muat ulang halaman untuk mengembalikan state awal (cara paling mudah dan bersih)
+      location.reload();
+    }
+  </script>
+
+</body>
+</html>
